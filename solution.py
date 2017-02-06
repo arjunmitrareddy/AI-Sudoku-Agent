@@ -156,7 +156,7 @@ def only_choice(values):
         for digit in "123456789":
             dplaces = [box for box in unit if digit in values[box]]
             if len(dplaces) == 1:
-                values[dplaces[0]] = digit
+                assign_value(values, dplaces[0], digit)
     return values
 
 def reduce_puzzle(values):
@@ -187,7 +187,7 @@ def search(values):
         return False
     if all(len(values[s]) == 1 for s in boxes):
         return values
-    valuesSize, box = min((len(values[s]), s) for s in boxes if len(values[s]) > 1)
+    box = min(s for s in boxes if len(values[s]) > 1)
     for value in values[box]:
         new_sudoku = values.copy()
         new_sudoku[box] = value
