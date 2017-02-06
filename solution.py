@@ -7,17 +7,37 @@ def cross(A, B):
 
 rows = "ABCDEFGHI"
 cols = "123456789"
+"""
+Creating All Boxes
+"""
 boxes = cross(rows, cols)
+"""
+Creating Row Units
+"""
 row_units = [cross(r, cols) for r in rows]
+"""
+Creating Columns Units
+"""
 column_units = [cross(rows, c) for c in cols]
 diag_units = [[],[]]
+"""
+Creating Diagonal Units
+"""
 for index, s in enumerate(rows):
     diag_units[0].append(s+cols[index])
 for index, s in enumerate(reversed(rows)):
     diag_units[1].append(s + cols[index])
+"""
+Creating Square Units
+"""
 square_units = [cross(rs, cs) for rs in ["ABC", "DEF", "GHI"] for cs in ["123", "456", "789"]]
-
+"""
+Creating Enitre Unitlist
+"""
 unitlist = row_units + column_units + square_units + diag_units
+"""
+Creating Units and Peers for each box as a dictionary
+"""
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
@@ -47,20 +67,27 @@ def naked_twins(values):
             box1 = box
             for other_box in unit:
                 box2 = other_box
+                #checking if boxes are not same, then if values are same and then if lenght is 2
                 if box1 != box2 and values[box1] == values[box2] and len(values[box1]) == 2:
+                    #pushing the twin boxes
                     naked_twin_boxes.append(box1)
                     naked_twin_boxes.append(box2)
+                    #pushing the twin box values
                     naked_twin_values.append(values[box1])
 
         same_unit_boxes = []
+        #find the common unit these twins belong to
         if len(naked_twin_boxes) > 1:
             for unit in unitlist:
                 if naked_twin_boxes[0] in unit and naked_twin_boxes[1] in unit:
                     same_unit_boxes = unit
 
         if len(same_unit_boxes) > 0:
+            #if there are twins and there is common unit
             for box in same_unit_boxes:
+                #making sure the naked twins are not replaced
                 if box not in naked_twin_boxes:
+                    #replacing values of boxes if they contains any value from the naked twins
                     if naked_twin_values[0][0] in values[box]:
                         values[box] = values[box].replace(naked_twin_values[0][0], '')
                     if naked_twin_values[0][1] in values[box]:
